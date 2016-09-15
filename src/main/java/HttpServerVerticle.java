@@ -14,17 +14,21 @@ import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Created by yangzai on 5/9/16.
  */
 
 public class HttpServerVerticle extends AbstractVerticle {
-
-    private static final int PORT = 8080;
     private static final String API_HOST = "api.lifeup.com.sg";
     private static final String API_VERSION_PATH = "/v1";
     private static final int API_PORT = 443;
+    private static final int PORT = ((Supplier<Integer>)() -> {
+        try { return Integer.parseInt(System.getenv("PORT")); }
+        catch (Exception e) { return 8080; }
+    }).get();
+
     private HttpClient client;
 
     @Override
@@ -44,7 +48,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.mountSubRouter("/enet", eNetsRouter);
 
         //POST /v1/enet/enet_login
-        eNetsRouter.post("/enet_login").handler(rc -> {
+        eNetsRouter.post("/enet_login").handler(rc -> { //routing context
             HttpServerResponse res = rc.response();
 
             Map<String, List<String>> parameters =
