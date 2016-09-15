@@ -59,15 +59,15 @@ public class HttpServerVerticle extends AbstractVerticle {
                 return;
             }
 
-            if (!parameters.containsKey("enet_password")) {
-                res.end("enet_password is required.");
+            if (!parameters.containsKey("enet_pwd")) {
+                res.end("enet_pwd is required.");
                 return;
             }
 
             //get parameters and re-encode
             QueryStringEncoder qse = new QueryStringEncoder("");
             qse.addParam("username", parameters.get("enet_username").get(0));
-            qse.addParam("password", parameters.get("enet_password").get(0));
+            qse.addParam("password", parameters.get("enet_pwd").get(0));
 
             String queryString;
             try { queryString = qse.toUri().getQuery(); }
